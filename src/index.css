@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom font declarations */
+@font-face {
+  font-family: 'CustomArabic';
+  src: url('/fonts/Al-Kanz fonts (2).ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Use the same Arabic font for Urdu and Lisan al-Dawah */
+@font-face {
+  font-family: 'CustomUrdu';
+  src: url('/fonts/Al-Kanz fonts (2).ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-white text-secondary-800;
+    line-height: 1.5;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-secondary-900;
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-100 text-secondary-800 hover:bg-secondary-200;
+  }
+
+  .btn-accent {
+    @apply bg-accent-600 text-white hover:bg-accent-700;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-card hover:shadow-card-hover transition-shadow duration-200 overflow-hidden;
+  }
+  
+  .form-input {
+    @apply w-full px-3 py-2 border border-secondary-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-secondary-700 mb-1;
+  }
+  
+  .nav-link {
+    @apply flex items-center px-4 py-3 text-secondary-100 rounded-md transition-colors duration-200;
+  }
+  
+  .nav-link.active {
+    @apply bg-secondary-800 text-white;
+  }
+  
+  .nav-link:not(.active):hover {
+    @apply bg-secondary-700 text-white;
+  }
+}
+
+/* Language-specific fonts */
+[lang="ar"] {
+  font-family: 'CustomArabic', serif;
+}
+
+[lang="ur"], [lang="ld"] {
+  font-family: 'CustomUrdu', serif;
+}
+
+/* Poetry text styling for RTL languages */
+.poem-text[lang="ar"],
+.poem-text[lang="ur"],
+.poem-text[lang="ld"] {
+  font-family: 'CustomUrdu', serif;
+  line-height: 2;
+  text-align: right;
+  direction: rtl;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+}
+
+/* Poetry text styling for LTR languages */
+.poem-text[lang="en"],
+.poem-text[lang="fr"] {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.8;
+  text-align: left;
+  direction: ltr;
+}
+
+/* RTL language support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* Animation for page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
