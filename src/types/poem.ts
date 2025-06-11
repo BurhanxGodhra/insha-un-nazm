@@ -15,7 +15,7 @@ export interface Poem {
   title: string;
   content: string;
   author: Author;
-  language: 'English' | 'Arabic' | 'Urdu' | 'Lisan al-Dawah' | 'French';
+  language: 'English' | 'Arabic' | 'Urdu';
   date: string;
   likes: number;
   comments: Comment[];

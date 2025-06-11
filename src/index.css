@@ -2,22 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom font declarations */
-@font-face {
-  font-family: 'CustomArabic';
-  src: url('/fonts/Al-Kanz fonts (2).ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-/* Use the same Arabic font for Urdu and Lisan al-Dawah */
-@font-face {
-  font-family: 'CustomUrdu';
-  src: url('/fonts/Al-Kanz fonts (2).ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 @layer base {
   html {
     font-family: 'Inter', system-ui, sans-serif;
@@ -31,6 +15,26 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif text-secondary-900;
     line-height: 1.2;
+  }
+  
+  h1 {
+    @apply text-4xl font-semibold;
+  }
+  
+  h2 {
+    @apply text-3xl font-semibold;
+  }
+  
+  h3 {
+    @apply text-2xl font-semibold;
+  }
+  
+  h4 {
+    @apply text-xl font-semibold;
+  }
+  
+  p {
+    @apply mb-4;
   }
 }
 
@@ -76,43 +80,6 @@
   }
 }
 
-/* Language-specific fonts */
-[lang="ar"] {
-  font-family: 'CustomArabic', serif;
-}
-
-[lang="ur"], [lang="ld"] {
-  font-family: 'CustomUrdu', serif;
-}
-
-/* Poetry text styling for RTL languages */
-.poem-text[lang="ar"],
-.poem-text[lang="ur"],
-.poem-text[lang="ld"] {
-  font-family: 'CustomUrdu', serif;
-  line-height: 2;
-  text-align: right;
-  direction: rtl;
-  padding: 1rem;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.5rem;
-}
-
-/* Poetry text styling for LTR languages */
-.poem-text[lang="en"],
-.poem-text[lang="fr"] {
-  font-family: 'Inter', sans-serif;
-  line-height: 1.8;
-  text-align: left;
-  direction: ltr;
-}
-
-/* RTL language support */
-[dir="rtl"] {
-  text-align: right;
-}
-
 /* Animation for page transitions */
 .page-enter {
   opacity: 0;
@@ -150,4 +117,14 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
+}
+
+/* Typography for poetry display */
+.poem-text {
+  @apply font-serif text-lg leading-relaxed text-secondary-800 whitespace-pre-line;
+}
+
+/* RTL language support */
+[dir="rtl"] {
+  text-align: right;
 }

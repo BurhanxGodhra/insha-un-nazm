@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, X, Info, Upload, PenTool } from 'lucide-react';
+import { Send, X, Info, Upload, PenTool, BookOpen } from 'lucide-react';
 import AppLayout from '../components/layout/AppLayout';
 import { useAuth } from '../contexts/AuthContext';
 import { mockOpeningVerses } from '../data/mockData';
@@ -10,7 +10,7 @@ const SubmitPoemPage: React.FC = () => {
   const navigate = useNavigate();
   
   const [content, setContent] = useState('');
-  const [language, setLanguage] = useState<'English' | 'Arabic' | 'Urdu' | 'Lisan al-Dawah' | 'French'>('English');
+  const [language, setLanguage] = useState<'English' | 'Arabic' | 'Urdu'>('English');
   const [inspiredByVerse, setInspiredByVerse] = useState('');
   const [currentVerses, setCurrentVerses] = useState(mockOpeningVerses);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -21,8 +21,10 @@ const SubmitPoemPage: React.FC = () => {
     file?: string;
   }>({});
 
-  const isRTL = language === 'Arabic' || language === 'Urdu' || language === 'Lisan al-Dawah';
+  // Set writing direction based on language
+  const textDirection = language === 'Arabic' || language === 'Urdu' ? 'rtl' : 'ltr';
   
+  // Filter opening verses by selected language
   useEffect(() => {
     setCurrentVerses(mockOpeningVerses.filter(verse => verse.language === language));
   }, [language]);
@@ -54,6 +56,7 @@ const SubmitPoemPage: React.FC = () => {
       return;
     }
     
+    // In a real app, this would send data to the server
     console.log({
       content: submissionType === 'manual' ? content : selectedFile,
       language,
@@ -61,8 +64,10 @@ const SubmitPoemPage: React.FC = () => {
       author: user?.id,
     });
     
+    // Show success message
     setSubmitSuccess(true);
     
+    // Reset form after delay
     setTimeout(() => {
       setContent('');
       setLanguage('English');
@@ -103,6 +108,7 @@ const SubmitPoemPage: React.FC = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
+            {/* Submission Type Selection */}
             {!submissionType && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div
@@ -135,6 +141,7 @@ const SubmitPoemPage: React.FC = () => {
 
             {submissionType && (
               <>
+                {/* Inspiration panel */}
                 <div className="bg-primary-50 p-6 rounded-lg mb-6">
                   <div className="flex items-start mb-4">
                     <Info size={20} className="text-primary-600 mr-2 flex-shrink-0 mt-1" />
@@ -155,7 +162,7 @@ const SubmitPoemPage: React.FC = () => {
                         }`}
                         onClick={() => setInspiredByVerse(verse.id)}
                       >
-                        <div className={`font-serif italic text-lg ${isRTL ? 'text-right' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                        <div className={`font-serif italic text-lg ${textDirection === 'rtl' ? 'text-right' : ''}`} dir={textDirection}>
                           "{verse.text}"
                         </div>
                         <div className="mt-2 text-sm text-secondary-600 flex justify-between">
@@ -173,6 +180,7 @@ const SubmitPoemPage: React.FC = () => {
                   </div>
                 </div>
                 
+                {/* Poem form */}
                 <div className="space-y-6">
                   <div>
                     <label htmlFor="language" className="form-label">Language</label>
@@ -180,13 +188,11 @@ const SubmitPoemPage: React.FC = () => {
                       id="language"
                       className="form-input"
                       value={language}
-                      onChange={(e) => setLanguage(e.target.value as typeof language)}
+                      onChange={(e) => setLanguage(e.target.value as 'English' | 'Arabic' | 'Urdu')}
                     >
                       <option value="English">English</option>
                       <option value="Arabic">Arabic</option>
                       <option value="Urdu">Urdu</option>
-                      <option value="Lisan al-Dawah">Lisan al-Dawah</option>
-                      <option value="French">French</option>
                     </select>
                   </div>
                   
@@ -195,13 +201,12 @@ const SubmitPoemPage: React.FC = () => {
                       <label htmlFor="content" className="form-label">Poem Content</label>
                       <textarea
                         id="content"
-                        className={`form-input min-h-[300px] text-lg leading-relaxed poem-text ${
+                        className={`form-input min-h-[300px] font-serif text-lg leading-relaxed ${
                           errors.content ? 'border-error-500 ring-1 ring-error-500' : ''
                         }`}
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        dir={isRTL ? 'rtl' : 'ltr'}
-                        lang={language === 'Lisan al-Dawah' ? 'ld' : language.toLowerCase()}
+                        dir={textDirection}
                       ></textarea>
                       {errors.content && (
                         <p className="mt-1 text-sm text-error-600">{errors.content}</p>
