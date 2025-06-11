@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Heart, MessageSquare, Share2, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Star, Calendar, FileText, Mic, Upload, CheckCircle, Clock, ThumbsUp, ThumbsDown, Download, Play } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { Poem, Comment } from '../../types/poem';
+import { Poem } from '../../types/poem';
 
 interface PoemDetailsProps {
   poem: Poem;
@@ -18,69 +18,155 @@ const PoemDetails: React.FC<PoemDetailsProps> = ({
   onReject,
   isAdmin = false
 }) => {
-  const [comment, setComment] = useState('');
-  const [localComments, setLocalComments] = useState<Comment[]>(poem.comments);
-  const [localLikes, setLocalLikes] = useState(poem.likes);
-  const [hasLiked, setHasLiked] = useState(false);
   
-  const handleSubmitComment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!comment.trim()) return;
-    
-    const newComment: Comment = {
-      id: `comment-${Date.now()}`,
-      text: comment,
-      author: { id: '2', name: 'You' },
-      date: new Date().toISOString()
-    };
-    
-    setLocalComments([...localComments, newComment]);
-    setComment('');
-  };
-  
-  const handleLike = () => {
-    if (!hasLiked) {
-      setLocalLikes(localLikes + 1);
-      setHasLiked(true);
-    } else {
-      setLocalLikes(localLikes - 1);
-      setHasLiked(false);
+  // Get submission method icon and text
+  const getSubmissionInfo = () => {
+    switch (poem.submissionMethod) {
+      case 'upload':
+        return {
+          icon: <Upload size={18} className="text-secondary-500" />,
+          text: 'File Upload',
+          fileName: poem.fileName
+        };
+      case 'recording':
+        return {
+          icon: <Mic size={18} className="text-accent-500" />,
+          text: 'Audio Recording',
+          fileName: poem.audioFileName
+        };
+      default:
+        return {
+          icon: <FileText size={18} className="text-primary-500" />,
+          text: 'Manual Entry',
+          fileName: null
+        };
     }
+  };
+
+  const submissionInfo = getSubmissionInfo();
+
+  // Render star rating
+  const renderStars = () => {
+    return (
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            size={20}
+            className={`${
+              star <= Math.round(poem.rating)
+                ? 'text-yellow-400 fill-current'
+                : 'text-gray-300'
+            }`}
+          />
+        ))}
+        <span className="ml-2 text-lg font-medium text-secondary-700">
+          {poem.rating > 0 ? `${poem.rating.toFixed(1)} / 5.0` : 'Not rated yet'}
+        </span>
+      </div>
+    );
   };
   
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b border-secondary-200 flex justify-between items-center">
-          <h2 className="text-2xl font-serif">{poem.title}</h2>
-          <button 
-            onClick={onClose}
-            className="text-secondary-500 hover:text-secondary-700"
-          >
-            Close
-          </button>
+        <div className="p-6 border-b border-secondary-200">
+          <div className="flex justify-between items-start">
+            <div>
+              <div className="flex items-center space-x-3 mb-2">
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  poem.type === 'individual' 
+                    ? 'bg-accent-100 text-accent-700' 
+                    : 'bg-primary-100 text-primary-700'
+                }`}>
+                  {poem.type === 'individual' ? 'Individual Abyat' : 'Full Nazam'}
+                </span>
+                <span className="px-3 py-1 bg-secondary-100 rounded-full text-secondary-700 text-sm">
+                  {poem.language}
+                </span>
+                {poem.featured && (
+                  <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
+                    Featured
+                  </span>
+                )}
+              </div>
+              <h2 className="text-2xl font-serif">
+                {poem.type === 'individual' ? 'Individual Abyat' : 'Full Nazam'} by {poem.author.name}
+              </h2>
+            </div>
+            <button 
+              onClick={onClose}
+              className="text-secondary-500 hover:text-secondary-700 text-lg font-medium"
+            >
+              ✕
+            </button>
+          </div>
         </div>
         
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-6">
           {/* Poem metadata */}
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <span className="font-medium">{poem.author.name}</span>
-              <span className="mx-2 text-secondary-400">•</span>
-              <span className="text-secondary-500">
-                {formatDistanceToNow(new Date(poem.date), { addSuffix: true })}
-              </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <Calendar size={18} className="text-secondary-500 mr-2" />
+                <span className="text-secondary-600">Entry Date:</span>
+                <span className="ml-2 font-medium">
+                  {formatDistanceToNow(new Date(poem.entryDate), { addSuffix: true })}
+                </span>
+              </div>
+              
+              <div className="flex items-center">
+                {submissionInfo.icon}
+                <span className="text-secondary-600 ml-2">Submission Method:</span>
+                <span className="ml-2 font-medium">{submissionInfo.text}</span>
+              </div>
+              
+              {submissionInfo.fileName && (
+                <div className="flex items-center">
+                  <FileText size={18} className="text-secondary-500 mr-2" />
+                  <span className="text-secondary-600">File:</span>
+                  <span className="ml-2 font-medium text-primary-600">{submissionInfo.fileName}</span>
+                  {poem.submissionMethod === 'recording' && (
+                    <button className="ml-2 p-1 text-accent-600 hover:text-accent-700">
+                      <Play size={16} />
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
-            <span className="px-3 py-1 bg-secondary-100 rounded-full text-secondary-700 text-sm">
-              {poem.language}
-            </span>
+            
+            <div className="space-y-4">
+              <div>
+                <span className="text-secondary-600">Rating:</span>
+                <div className="mt-1">
+                  {renderStars()}
+                </div>
+              </div>
+              
+              <div className="flex items-center">
+                {poem.status === 'araz_done' ? (
+                  <>
+                    <CheckCircle size={18} className="text-success-500 mr-2" />
+                    <span className="text-success-600 font-medium">Araz Done</span>
+                  </>
+                ) : (
+                  <>
+                    <Clock size={18} className="text-warning-500 mr-2" />
+                    <span className="text-warning-600 font-medium">Araz Pending</span>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
           
           {/* Poem content */}
-          <div className={`poem-text mb-8 ${poem.language === 'Arabic' || poem.language === 'Urdu' ? 'rtl' : ''}`}>
-            {poem.content}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4">Content</h3>
+            <div className={`poem-text bg-secondary-50 p-6 rounded-lg ${poem.language === 'Arabic' || poem.language === 'Urdu' ? 'rtl' : ''}`}>
+              {poem.content}
+            </div>
           </div>
           
           {/* Admin actions */}
@@ -91,76 +177,33 @@ const PoemDetails: React.FC<PoemDetailsProps> = ({
                 className="btn bg-success-500 text-white hover:bg-success-600 flex items-center"
               >
                 <ThumbsUp size={18} className="mr-2" />
-                Approve Poem
+                Approve {poem.type === 'individual' ? 'Abyat' : 'Nazam'}
               </button>
               <button 
                 onClick={onReject}
                 className="btn bg-error-500 text-white hover:bg-error-600 flex items-center"
               >
                 <ThumbsDown size={18} className="mr-2" />
-                Reject Poem
+                Reject {poem.type === 'individual' ? 'Abyat' : 'Nazam'}
               </button>
             </div>
           )}
           
-          {/* User actions */}
-          <div className="flex space-x-4 mb-8">
-            <button 
-              className={`btn flex items-center ${hasLiked ? 'text-accent-600' : 'text-secondary-700'}`}
-              onClick={handleLike}
-            >
-              <Heart size={18} className="mr-2" fill={hasLiked ? 'currentColor' : 'none'} />
-              <span>{localLikes} Likes</span>
-            </button>
-            <button className="btn flex items-center text-secondary-700">
-              <Share2 size={18} className="mr-2" />
-              <span>Share</span>
-            </button>
-          </div>
-          
-          {/* Comments section */}
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Comments ({localComments.length})</h3>
-            
-            {/* Comment form */}
-            <form onSubmit={handleSubmitComment} className="mb-6">
-              <div className="mb-2">
-                <textarea
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  className="form-input min-h-20"
-                  placeholder="Write a comment..."
-                  rows={3}
-                ></textarea>
-              </div>
-              <div className="text-right">
-                <button type="submit" className="btn btn-primary">
-                  Add Comment
+          {/* File download for uploaded content */}
+          {(poem.fileName || poem.audioFileName) && (
+            <div className="p-4 bg-primary-50 rounded-lg">
+              <h4 className="font-medium mb-2">Attached File</h4>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-secondary-600">
+                  {poem.fileName || poem.audioFileName}
+                </span>
+                <button className="btn btn-primary btn-sm flex items-center">
+                  <Download size={16} className="mr-1" />
+                  Download
                 </button>
               </div>
-            </form>
-            
-            {/* Comments list */}
-            <div className="space-y-4">
-              {localComments.map((comment) => (
-                <div key={comment.id} className="border-b border-secondary-100 pb-4">
-                  <div className="flex justify-between mb-2">
-                    <span className="font-medium">{comment.author.name}</span>
-                    <span className="text-sm text-secondary-500">
-                      {formatDistanceToNow(new Date(comment.date), { addSuffix: true })}
-                    </span>
-                  </div>
-                  <p className="text-secondary-800">{comment.text}</p>
-                </div>
-              ))}
-              
-              {localComments.length === 0 && (
-                <p className="text-center text-secondary-500 py-4">
-                  No comments yet. Be the first to comment!
-                </p>
-              )}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

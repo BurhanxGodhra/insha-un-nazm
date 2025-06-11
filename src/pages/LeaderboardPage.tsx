@@ -1,108 +1,179 @@
 import React, { useState } from 'react';
-import { Star } from 'lucide-react';
+import { Star, Trophy, Medal, Award } from 'lucide-react';
 import AppLayout from '../components/layout/AppLayout';
-import { motion } from 'framer-motion';
-
-interface Poet {
-  id: string;
-  name: string;
-  avatar: string;
-  poemTitle: string;
-  rating: number;
-}
-
-const mockPoets: Poet[] = [
-  {
-    id: '1',
-    name: 'Elias Thorne',
-    avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=32',
-    poemTitle: 'Whispers of the Dusk',
-    rating: 98.5
-  },
-  {
-    id: '2',
-    name: 'Sophia Reed',
-    avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=32',
-    poemTitle: 'Silent Rhymes of the Forest',
-    rating: 96.2
-  },
-  // Add more mock data as needed
-];
+import PoemCard from '../components/poems/PoemCard';
+import PoemDetails from '../components/poems/PoemDetails';
+import { mockPoems } from '../data/mockData';
+import { Poem } from '../types/poem';
 
 const LeaderboardPage: React.FC = () => {
-  const [selectedPoet, setSelectedPoet] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<'individual' | 'full'>('individual');
+  const [selectedPoemId, setSelectedPoemId] = useState<string | null>(null);
+
+  // Get approved poems only and filter by type
+  const approvedPoems = mockPoems.filter(poem => poem.approved && poem.rating > 0);
+  const individualAbyat = approvedPoems
+    .filter(poem => poem.type === 'individual')
+    .sort((a, b) => b.rating - a.rating);
+  const fullNazams = approvedPoems
+    .filter(poem => poem.type === 'full')
+    .sort((a, b) => b.rating - a.rating);
+
+  const currentPoems = selectedCategory === 'individual' ? individualAbyat : fullNazams;
+  
+  const selectedPoem = selectedPoemId 
+    ? approvedPoems.find(poem => poem.id === selectedPoemId) 
+    : null;
+
+  const getRankIcon = (rank: number) => {
+    switch (rank) {
+      case 1:
+        return <Trophy size={24} className="text-yellow-500" />;
+      case 2:
+        return <Medal size={24} className="text-gray-400" />;
+      case 3:
+        return <Award size={24} className="text-amber-700" />;
+      default:
+        return (
+          <div className="w-6 h-6 rounded-full bg-secondary-100 flex items-center justify-center text-secondary-800 font-semibold text-sm">
+            {rank}
+          </div>
+        );
+    }
+  };
+
+  const renderStars = (rating: number) => {
+    return (
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            size={16}
+            className={`${
+              star <= Math.round(rating)
+                ? 'text-yellow-400 fill-current'
+                : 'text-gray-300'
+            }`}
+          />
+        ))}
+        <span className="ml-2 text-sm font-medium text-secondary-700">
+          {rating.toFixed(1)}
+        </span>
+      </div>
+    );
+  };
 
   return (
-    <AppLayout title="Poet Leaderboard">
-      <div className="max-w-5xl mx-auto">
-        <div className="bg-white rounded-lg shadow-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-50 text-left">
-                  <th className="px-6 py-4 text-sm font-medium text-gray-500">Rank</th>
-                  <th className="px-6 py-4 text-sm font-medium text-gray-500">Poet / Poem</th>
-                  <th className="px-6 py-4 text-sm font-medium text-gray-500">Score</th>
-                  <th className="px-6 py-4 text-sm font-medium text-gray-500">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {mockPoets.map((poet, index) => (
-                  <motion.tr
-                    key={poet.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="hover:bg-gray-50"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {index + 1}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <img
-                          src={poet.avatar}
-                          alt={poet.name}
-                          className="h-8 w-8 rounded-full"
-                        />
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{poet.name}</div>
-                          <div className="text-sm text-gray-500">{poet.poemTitle}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <span className="text-sm font-medium text-gray-900">{poet.rating}</span>
-                        <div className="ml-2 flex">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              size={16}
-                              className={`${
-                                star <= Math.round(poet.rating / 20)
-                                  ? 'text-yellow-400 fill-current'
-                                  : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <button
-                        onClick={() => setSelectedPoet(poet.id)}
-                        className="text-primary-600 hover:text-primary-800 font-medium"
-                      >
-                        View Poem
-                      </button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
+    <AppLayout title="Leaderboard">
+      <div className="max-w-6xl mx-auto">
+        {/* Category selection */}
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-8">
+          <div className="flex flex-wrap gap-2">
+            <button
+              className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors ${
+                selectedCategory === 'individual'
+                  ? 'bg-accent-600 text-white'
+                  : 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200'
+              }`}
+              onClick={() => setSelectedCategory('individual')}
+            >
+              Individual Abyat Leaderboard
+            </button>
+            <button
+              className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors ${
+                selectedCategory === 'full'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200'
+              }`}
+              onClick={() => setSelectedCategory('full')}
+            >
+              Full Nazam Leaderboard
+            </button>
           </div>
         </div>
+        
+        {/* Selected category title */}
+        <h2 className="text-2xl font-serif mb-6">
+          {selectedCategory === 'individual' ? 'Top Individual Abyat' : 'Top Full Nazams'}
+          <span className="text-secondary-500 text-lg ml-2">
+            (Ranked by Admin Rating)
+          </span>
+        </h2>
+        
+        {/* Leaderboard */}
+        {currentPoems.length > 0 ? (
+          <div className="space-y-4">
+            {currentPoems.map((poem, index) => (
+              <div 
+                key={poem.id} 
+                className={`bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer ${
+                  index < 3 ? 'border-l-4' : ''
+                } ${
+                  index === 0 ? 'border-yellow-500' : 
+                  index === 1 ? 'border-gray-400' : 
+                  index === 2 ? 'border-amber-700' : ''
+                }`}
+                onClick={() => setSelectedPoemId(poem.id)}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    {/* Rank */}
+                    <div className="flex-shrink-0">
+                      {getRankIcon(index + 1)}
+                    </div>
+                    
+                    {/* Poem info */}
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          poem.type === 'individual' 
+                            ? 'bg-accent-100 text-accent-700' 
+                            : 'bg-primary-100 text-primary-700'
+                        }`}>
+                          {poem.type === 'individual' ? 'Individual Abyat' : 'Full Nazam'}
+                        </span>
+                        <span className="text-xs px-2 py-1 bg-secondary-100 rounded-full text-secondary-700">
+                          {poem.language}
+                        </span>
+                      </div>
+                      
+                      <div className={`poem-text text-sm mb-2 ${poem.language === 'Arabic' || poem.language === 'Urdu' ? 'rtl' : ''}`}>
+                        {poem.content.split('\n').slice(0, 1).join('\n')}
+                        {poem.content.split('\n').length > 1 && <span className="text-secondary-500">...</span>}
+                      </div>
+                      
+                      <div className="flex items-center text-sm text-secondary-500">
+                        <span className="font-medium text-secondary-700">{poem.author.name}</span>
+                        <span className="mx-2">•</span>
+                        <span>{new Date(poem.entryDate).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Rating */}
+                  <div className="flex-shrink-0">
+                    {renderStars(poem.rating)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+            <h3 className="text-xl font-semibold mb-2">No rated {selectedCategory === 'individual' ? 'abyat' : 'nazams'} yet</h3>
+            <p className="text-secondary-600">
+              {selectedCategory === 'individual' ? 'Individual abyat' : 'Full nazams'} will appear here once they are rated by admins.
+            </p>
+          </div>
+        )}
+        
+        {/* Poem details modal */}
+        {selectedPoem && (
+          <PoemDetails
+            poem={selectedPoem}
+            onClose={() => setSelectedPoemId(null)}
+          />
+        )}
       </div>
     </AppLayout>
   );

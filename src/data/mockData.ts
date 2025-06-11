@@ -2,11 +2,11 @@ import { Poem } from '../types/poem';
 import { OpeningVerse } from '../types/verse';
 import { Poet } from '../types/poet';
 
-// Mock poems data
+// Mock poems data with new structure
 export const mockPoems: Poem[] = [
   {
     id: '1',
-    title: 'Whispers of Dawn',
+    type: 'full',
     content: `The morning light breaks through the clouds,
 A symphony of colors, bold and proud.
 Birds sing their chorus, nature's sweet sound,
@@ -16,30 +16,18 @@ The world awakens to a brand new day,
 As shadows of night gently fade away.
 In this moment of peace, so pure and bright,
 I find my solace in the morning light.`,
-    author: { id: '1', name: 'Emily Chen' },
+    author: { id: '2', name: 'Regular User' },
     language: 'English',
-    date: '2025-04-01T08:30:00Z',
-    likes: 42,
-    comments: [
-      {
-        id: 'c1',
-        text: 'Beautiful imagery! I can almost feel the morning dew.',
-        author: { id: '3', name: 'Michael Johnson' },
-        date: '2025-04-01T10:15:00Z',
-      },
-      {
-        id: 'c2',
-        text: 'This poem brings back memories of peaceful mornings in the countryside.',
-        author: { id: '4', name: 'Sarah Williams' },
-        date: '2025-04-01T12:45:00Z',
-      },
-    ],
-    views: 128,
+    submissionMethod: 'manual',
+    entryDate: '2025-04-01T08:30:00Z',
+    rating: 4.5,
+    status: 'araz_done',
     approved: true,
+    featured: true,
   },
   {
     id: '2',
-    title: 'صمت الليل',
+    type: 'full',
     content: `في صمت الليل أجد نفسي
 وحيداً مع أفكاري التي لا تنام
 النجوم تتلألأ في السماء البعيدة
@@ -49,44 +37,31 @@ I find my solace in the morning light.`,
 يرسم ظلالاً ترقص على الجدران
 وأنا أستمع إلى نبضات قلبي
 تخبرني قصصاً لم أسمعها من قبل`,
-    author: { id: '2', name: 'Ahmed Hassan' },
+    author: { id: '2', name: 'Regular User' },
     language: 'Arabic',
-    date: '2025-04-02T19:45:00Z',
-    likes: 38,
-    comments: [
-      {
-        id: 'c3',
-        text: 'رائع جداً، استطعت أن تنقل الإحساس بسكون الليل بشكل جميل',
-        author: { id: '5', name: 'Layla Mahmoud' },
-        date: '2025-04-02T21:30:00Z',
-      },
-    ],
-    views: 95,
+    submissionMethod: 'manual',
+    entryDate: '2025-04-02T19:45:00Z',
+    rating: 4.2,
+    status: 'araz_pending',
     approved: true,
   },
   {
     id: '3',
-    title: 'شام کی روشنی',
+    type: 'individual',
     content: `شام کی روشنی میں ڈوبا ہوا منظر
-جھیل کے پانی پر ناچتی ہوئی کرنیں
-ہوا کے ساتھ لہراتے درخت
-اور پرندوں کی واپسی کا شور
-
-یہ وقت کتنا خوبصورت ہے
-جب دن رات میں ڈھلتا ہے
-رنگوں کا یہ کھیل، یہ تبدیلی
-میری روح کو سکون دیتی ہے`,
-    author: { id: '3', name: 'Farah Khan' },
+جھیل کے پانی پر ناچتی ہوئی کرنیں`,
+    author: { id: '2', name: 'Regular User' },
     language: 'Urdu',
-    date: '2025-04-03T18:20:00Z',
-    likes: 27,
-    comments: [],
-    views: 73,
+    submissionMethod: 'recording',
+    entryDate: '2025-04-03T18:20:00Z',
+    rating: 3.8,
+    status: 'araz_done',
     approved: true,
+    audioFileName: 'urdu_abyat_recording.mp3',
   },
   {
     id: '4',
-    title: 'Urban Symphony',
+    type: 'full',
     content: `Steel and glass reach for the sky,
 Where dreams and ambitions amplify.
 The rhythm of footsteps, a steady beat,
@@ -96,39 +71,26 @@ Car horns and whispers blend in the air,
 A cacophony of lives and souls laid bare.
 This concrete jungle, this human maze,
 Captures my heart in countless ways.`,
-    author: { id: '4', name: 'David Wilson' },
+    author: { id: '2', name: 'Regular User' },
     language: 'English',
-    date: '2025-04-04T14:10:00Z',
-    likes: 19,
-    comments: [
-      {
-        id: 'c4',
-        text: 'You\'ve captured city life perfectly!',
-        author: { id: '1', name: 'Emily Chen' },
-        date: '2025-04-04T16:35:00Z',
-      },
-    ],
-    views: 68,
+    submissionMethod: 'upload',
+    entryDate: '2025-04-04T14:10:00Z',
+    rating: 0, // Not rated yet
+    status: 'araz_pending',
     approved: false,
+    fileName: 'urban_symphony.txt',
   },
   {
     id: '5',
-    title: 'Digital Dreams',
+    type: 'individual',
     content: `In the realm of ones and zeros,
-We build worlds beyond imagination.
-Pixels paint realities unknown,
-Algorithms dance to their own creation.
-
-Through screens we connect,
-Across oceans and time zones.
-Digital whispers of humanity,
-In the vastness of the virtual unknown.`,
-    author: { id: '5', name: 'Alex Rivera' },
+We build worlds beyond imagination.`,
+    author: { id: '2', name: 'Regular User' },
     language: 'English',
-    date: '2025-04-05T09:50:00Z',
-    likes: 31,
-    comments: [],
-    views: 82,
+    submissionMethod: 'manual',
+    entryDate: '2025-04-05T09:50:00Z',
+    rating: 4.0,
+    status: 'araz_done',
     approved: false,
   },
 ];
