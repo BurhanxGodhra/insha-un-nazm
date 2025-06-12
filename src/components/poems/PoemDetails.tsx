@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Star, Calendar, FileText, Mic, Upload, CheckCircle, Clock, ThumbsUp, ThumbsDown, Download, Play } from 'lucide-react';
+import { Star, Calendar, FileText, Mic, Upload, CheckCircle, Clock, ThumbsUp, ThumbsDown, Download, Play, Eye, FileCheck } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Poem } from '../../types/poem';
 
 interface PoemDetailsProps {
   poem: Poem;
+  viewMode?: 'original' | 'araz';
   onClose: () => void;
   onApprove?: () => void;
   onReject?: () => void;
@@ -13,11 +14,13 @@ interface PoemDetailsProps {
 
 const PoemDetails: React.FC<PoemDetailsProps> = ({ 
   poem, 
+  viewMode = 'original',
   onClose,
   onApprove,
   onReject,
   isAdmin = false
 }) => {
+  const [currentViewMode, setCurrentViewMode] = useState(viewMode);
   
   // Get submission method icon and text
   const getSubmissionInfo = () => {
@@ -66,6 +69,14 @@ const PoemDetails: React.FC<PoemDetailsProps> = ({
       </div>
     );
   };
+
+  // Get content to display based on view mode
+  const getDisplayContent = () => {
+    if (currentViewMode === 'araz' && poem.arazContent) {
+      return poem.arazContent;
+    }
+    return poem.content;
+  };
   
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -90,6 +101,11 @@ const PoemDetails: React.FC<PoemDetailsProps> = ({
                     Featured
                   </span>
                 )}
+                {currentViewMode === 'araz' && (
+                  <span className="px-3 py-1 bg-success-100 text-success-700 rounded-full text-sm font-medium">
+                    Araz Version
+                  </span>
+                )}
               </div>
               <h2 className="text-2xl font-serif">
                 {poem.type === 'individual' ? 'Individual Abyat' : 'Full Nazam'} by {poem.author.name}
@@ -102,6 +118,34 @@ const PoemDetails: React.FC<PoemDetailsProps> = ({
               ✕
             </button>
           </div>
+
+          {/* View Mode Toggle */}
+          {poem.arazContent && poem.status === 'araz_done' && (
+            <div className="mt-4 flex space-x-2">
+              <button
+                onClick={() => setCurrentViewMode('original')}
+                className={`btn btn-sm flex items-center ${
+                  currentViewMode === 'original' 
+                    ? 'bg-primary-600 text-white' 
+                    : 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200'
+                }`}
+              >
+                <Eye size={16} className="mr-1" />
+                Original Version
+              </button>
+              <button
+                onClick={() => setCurrentViewMode('araz')}
+                className={`btn btn-sm flex items-center ${
+                  currentViewMode === 'araz' 
+                    ? 'bg-success-600 text-white' 
+                    : 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200'
+                }`}
+              >
+                <FileCheck size={16} className="mr-1" />
+                Araz Version
+              </button>
+            </div>
+          )}
         </div>
         
         {/* Body */}
@@ -163,9 +207,11 @@ const PoemDetails: React.FC<PoemDetailsProps> = ({
           
           {/* Poem content */}
           <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-4">Content</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {currentViewMode === 'araz' ? 'Araz Version Content' : 'Original Content'}
+            </h3>
             <div className={`poem-text bg-secondary-50 p-6 rounded-lg ${poem.language === 'Arabic' || poem.language === 'Urdu' ? 'rtl' : ''}`}>
-              {poem.content}
+              {getDisplayContent()}
             </div>
           </div>
           

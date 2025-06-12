@@ -1,15 +1,23 @@
 import React from 'react';
-import { Star, Calendar, FileText, Mic, Upload, CheckCircle, Clock } from 'lucide-react';
+import { Star, Calendar, FileText, Mic, Upload, CheckCircle, Clock, Eye, FileCheck } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Poem } from '../../types/poem';
 
 interface PoemCardProps {
   poem: Poem;
   onClick?: () => void;
+  onViewAraz?: () => void;
   showAuthor?: boolean; // For leaderboard vs personal view
+  showButtons?: boolean; // For personal view to show action buttons
 }
 
-const PoemCard: React.FC<PoemCardProps> = ({ poem, onClick, showAuthor = false }) => {
+const PoemCard: React.FC<PoemCardProps> = ({ 
+  poem, 
+  onClick, 
+  onViewAraz,
+  showAuthor = false,
+  showButtons = false 
+}) => {
   const {
     type,
     content,
@@ -22,6 +30,7 @@ const PoemCard: React.FC<PoemCardProps> = ({ poem, onClick, showAuthor = false }
     submissionMethod,
     fileName,
     audioFileName,
+    arazContent,
   } = poem;
 
   // Only show the first few lines of the poem
@@ -63,8 +72,7 @@ const PoemCard: React.FC<PoemCardProps> = ({ poem, onClick, showAuthor = false }
   
   return (
     <div 
-      className={`card cursor-pointer ${!approved ? 'border border-warning-500' : ''}`}
-      onClick={onClick}
+      className={`card ${!approved ? 'border border-warning-500' : ''}`}
     >
       <div className="p-6">
         <div className="flex justify-between items-start mb-3">
@@ -109,32 +117,87 @@ const PoemCard: React.FC<PoemCardProps> = ({ poem, onClick, showAuthor = false }
         </div>
         
         {/* Rating */}
-        <div className="mb-3">
+        <div className="mb-4">
           {renderStars()}
         </div>
         
-        {/* Status and File Info */}
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            {status === 'araz_done' ? (
-              <div className="flex items-center text-success-600">
-                <CheckCircle size={16} className="mr-1" />
-                <span className="text-sm font-medium">Araz Done</span>
-              </div>
-            ) : (
-              <div className="flex items-center text-warning-600">
-                <Clock size={16} className="mr-1" />
-                <span className="text-sm font-medium">Araz Pending</span>
+        {/* Status Bar */}
+        <div className="mb-4">
+          <div className={`w-full h-2 rounded-full ${
+            status === 'araz_done' ? 'bg-success-200' : 'bg-warning-200'
+          }`}>
+            <div 
+              className={`h-full rounded-full transition-all duration-300 ${
+                status === 'araz_done' 
+                  ? 'bg-success-500 w-full' 
+                  : 'bg-warning-500 w-1/2'
+              }`}
+            />
+          </div>
+          <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center">
+              {status === 'araz_done' ? (
+                <CheckCircle size={16} className="mr-1 text-success-600" />
+              ) : (
+                <Clock size={16} className="mr-1 text-warning-600" />
+              )}
+              <span className={`text-sm font-medium ${
+                status === 'araz_done' ? 'text-success-600' : 'text-warning-600'
+              }`}>
+                {status === 'araz_done' ? 'Araz Done' : 'Araz Pending'}
+              </span>
+            </div>
+            
+            {(fileName || audioFileName) && (
+              <div className="text-xs text-secondary-500">
+                {fileName || audioFileName}
               </div>
             )}
           </div>
-          
-          {(fileName || audioFileName) && (
-            <div className="text-xs text-secondary-500">
-              {fileName || audioFileName}
-            </div>
-          )}
         </div>
+        
+        {/* Action Buttons */}
+        {showButtons && (
+          <div className="flex space-x-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick?.();
+              }}
+              className="flex-1 btn btn-primary btn-sm flex items-center justify-center"
+            >
+              <Eye size={16} className="mr-1" />
+              View {type === 'individual' ? 'Abyat' : 'Nazam'}
+            </button>
+            
+            {status === 'araz_done' && arazContent && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewAraz?.();
+                }}
+                className="flex-1 btn btn-accent btn-sm flex items-center justify-center"
+              >
+                <FileCheck size={16} className="mr-1" />
+                View Araz Version
+              </button>
+            )}
+          </div>
+        )}
+        
+        {/* For leaderboard view - clickable card */}
+        {!showButtons && onClick && (
+          <div 
+            className="cursor-pointer"
+            onClick={onClick}
+          >
+            <div className="text-right">
+              <span className="text-sm font-medium text-primary-600 hover:underline">
+                View {type === 'individual' ? 'Abyat' : 'Nazam'}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

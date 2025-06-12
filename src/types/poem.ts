@@ -18,4 +18,5 @@ export interface Poem {
   featured?: boolean; // Whether this poem is featured by admin
   fileName?: string; // For uploaded files
   audioFileName?: string; // For audio recordings
+  arazContent?: string; // Final checked version by admin for araz
 }

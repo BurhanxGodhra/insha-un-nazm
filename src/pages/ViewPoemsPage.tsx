@@ -12,6 +12,7 @@ const ViewPoemsPage: React.FC = () => {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [filteredPoems, setFilteredPoems] = useState<Poem[]>([]);
   const [selectedPoemId, setSelectedPoemId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'original' | 'araz'>('original');
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [languageFilter, setLanguageFilter] = useState<string>('all');
@@ -60,6 +61,16 @@ const ViewPoemsPage: React.FC = () => {
   const selectedPoem = selectedPoemId 
     ? poems.find(poem => poem.id === selectedPoemId) 
     : null;
+
+  const handleViewOriginal = (poemId: string) => {
+    setSelectedPoemId(poemId);
+    setViewMode('original');
+  };
+
+  const handleViewAraz = (poemId: string) => {
+    setSelectedPoemId(poemId);
+    setViewMode('araz');
+  };
   
   return (
     <AppLayout title="My Poems">
@@ -137,8 +148,10 @@ const ViewPoemsPage: React.FC = () => {
               <PoemCard 
                 key={poem.id} 
                 poem={poem} 
-                onClick={() => setSelectedPoemId(poem.id)}
+                onClick={() => handleViewOriginal(poem.id)}
+                onViewAraz={() => handleViewAraz(poem.id)}
                 showAuthor={false}
+                showButtons={true}
               />
             ))}
           </div>
@@ -158,6 +171,7 @@ const ViewPoemsPage: React.FC = () => {
         {selectedPoem && (
           <PoemDetails
             poem={selectedPoem}
+            viewMode={viewMode}
             onClose={() => setSelectedPoemId(null)}
           />
         )}

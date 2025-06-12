@@ -24,6 +24,17 @@ I find my solace in the morning light.`,
     status: 'araz_done',
     approved: true,
     featured: true,
+    arazContent: `The morning light breaks through the clouds,
+A symphony of colors, bold and proud.
+Birds sing their chorus, nature's sweet sound,
+As dew-kissed grass sparkles across the ground.
+
+The world awakens to a brand new day,
+As shadows of night gently fade away.
+In this moment of peace, so pure and bright,
+I find my solace in the morning light.
+
+[Admin Note: Minor corrections made for meter consistency]`,
   },
   {
     id: '2',
@@ -58,6 +69,10 @@ I find my solace in the morning light.`,
     status: 'araz_done',
     approved: true,
     audioFileName: 'urdu_abyat_recording.mp3',
+    arazContent: `شام کی روشنی میں ڈوبا ہوا منظر
+جھیل کے پانی پر ناچتی ہوئی کرنیں
+
+[Admin Note: Pronunciation guide added for proper recitation]`,
   },
   {
     id: '4',
@@ -92,6 +107,10 @@ We build worlds beyond imagination.`,
     rating: 4.0,
     status: 'araz_done',
     approved: false,
+    arazContent: `In the realm of ones and zeros,
+We build worlds beyond imagination.
+
+[Admin Note: Excellent metaphor for digital creativity]`,
   },
 ];
 
