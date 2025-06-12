@@ -8,7 +8,7 @@ export interface Poem {
   type: 'individual' | 'full'; // Individual Abyat or Full Nazam
   content: string;
   author: Author;
-  language: 'English' | 'Arabic' | 'Urdu';
+  language: 'English' | 'French' | 'Arabic' | 'Lisan al-Dawah' | 'Urdu';
   submissionMethod: 'upload' | 'recording' | 'manual';
   entryDate: string;
   rating: number; // 0-5 stars given by admin
