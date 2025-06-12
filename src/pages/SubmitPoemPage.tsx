@@ -13,7 +13,7 @@ const SubmitPoemPage: React.FC = () => {
   const navigate = useNavigate();
   
   const [poemType, setPoemType] = useState<PoemType>(null);
-  const [language, setLanguage] = useState<'English' | 'Arabic' | 'Urdu'>('English');
+  const [language, setLanguage] = useState<'English' | 'French' | 'Arabic' | 'Lisan al-Dawah' | 'Urdu'>('English');
   const [inspiredByVerse, setInspiredByVerse] = useState('');
   const [submissionMethod, setSubmissionMethod] = useState<SubmissionMethod>(null);
   const [content, setContent] = useState('');
