@@ -191,7 +191,7 @@ const AdminOpeningVersesPage: React.FC = () => {
                 <label className="form-label">Verse Text</label>
                 <textarea
                   className={`form-input min-h-[120px] ${
-                    formData.language === 'Arabic' || formData.language === 'Urdu' ? 'text-right' : ''
+                    formData.language === 'Arabic' || formData.language === 'Lisan al-Dawah' || formData.language === 'Urdu' ? 'text-right' : ''
                   }`}
                   value={formData.text}
                   onChange={(e) => setFormData({
@@ -199,7 +199,7 @@ const AdminOpeningVersesPage: React.FC = () => {
                     text: e.target.value
                   })}
                   placeholder="Enter the opening verse"
-                  dir={formData.language === 'Arabic' || formData.language === 'Urdu' ? 'rtl' : 'ltr'}
+                  dir={formData.language === 'Arabic' || formData.language === 'Lisan al-Dawah' || formData.language === 'Urdu' ? 'rtl' : 'ltr'}
                   required
                 />
               </div>
