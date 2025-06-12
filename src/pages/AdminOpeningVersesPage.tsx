@@ -268,8 +268,8 @@ const AdminOpeningVersesPage: React.FC = () => {
                       
                       {/* Verse content */}
                       <div className={`font-serif italic text-base mb-3 ${
-                        verse.language === 'Arabic' || verse.language === 'Urdu' ? 'text-right' : ''
-                      }`} dir={verse.language === 'Arabic' || verse.language === 'Urdu' ? 'rtl' : 'ltr'}>
+                        verse.language === 'Arabic' || verse.language === 'Lisan al-Dawah' || verse.language === 'Urdu' ? 'text-right' : ''
+                      }`} dir={verse.language === 'Arabic' || verse.language === 'Lisan al-Dawah' || verse.language === 'Urdu' ? 'rtl' : 'ltr'}>
                         "{verse.text}"
                       </div>
                       
