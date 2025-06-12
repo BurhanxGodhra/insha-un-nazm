@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
       description: 'Upload and manage daily opening verses.',
       icon: <Calendar size={24} />,
       path: '/admin/opening-verses',
-      color: 'bg-purple-600',
+      color: 'bg-secondary-700',
     },
     {
       title: 'Featured Nazm Selection',
