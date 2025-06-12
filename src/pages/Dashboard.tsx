@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
       description: 'Select and manage featured namzs of the day.',
       icon: <Star size={24} />,
       path: '/admin/featured-poem',
-      color: 'bg-accent-600',
+      color: 'bg-primary-600',
     },
     {
       title: 'Nazm Checking & Araz',
