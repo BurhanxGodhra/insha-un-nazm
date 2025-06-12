@@ -11,14 +11,14 @@ const Dashboard: React.FC = () => {
   
   const userFeatures = [
     {
-      title: 'Submit Poem',
+      title: 'Submit Nazm',
       description: 'Share your poetic creation with the world.',
       icon: <PenTool size={24} />,
       path: '/submit-poem',
       color: 'bg-primary-600',
     },
     {
-      title: 'View Poems',
+      title: 'View Nazm',
       description: 'Explore poems submitted by other poets.',
       icon: <BookOpen size={24} />,
       path: '/view-poems',
@@ -33,21 +33,21 @@ const Dashboard: React.FC = () => {
     },
     {
       title: 'Leaderboard',
-      description: 'See the top-ranking poets of the event.',
+      description: 'See the top-ranking nazms of the event.',
       icon: <Award size={24} />,
       path: '/leaderboard',
       color: 'bg-secondary-700',
     },
     {
-      title: 'Best Poem',
-      description: 'Discover the highest-rated poems by category.',
+      title: 'Best Nazm',
+      description: 'Discover the highest-rated nazms by category.',
       icon: <Trophy size={24} />,
       path: '/best-poem',
       color: 'bg-primary-700',
     },
     {
       title: 'Showcase',
-      description: 'View featured poems selected by our experts.',
+      description: 'View featured nazms.',
       icon: <Sparkles size={24} />,
       path: '/showcase',
       color: 'bg-accent-700',
