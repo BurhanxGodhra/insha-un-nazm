@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Filter, CheckCircle, XCircle, Star, Trophy } from 'lucide-react';
+import { Filter, CheckCircle, XCircle, Star, Eye } from 'lucide-react';
 import AppLayout from '../components/layout/AppLayout';
 import PoemCard from '../components/poems/PoemCard';
 import PoemDetails from '../components/poems/PoemDetails';
@@ -20,7 +20,6 @@ const AdminReviewPage: React.FC = () => {
   const [languageFilter, setLanguageFilter] = useState<string>('all');
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [currentRating, setCurrentRating] = useState(0);
-  const [showFeatureModal, setShowFeatureModal] = useState(false);
   
   // Redirect if not admin
   useEffect(() => {
@@ -95,21 +94,6 @@ const AdminReviewPage: React.FC = () => {
     setSelectedPoemId(null);
   };
 
-  const handleFeaturePoem = () => {
-    if (!selectedPoemId) return;
-    
-    setPoems(poems.map(poem => 
-      poem.id === selectedPoemId 
-        ? { ...poem, featured: !poem.featured } 
-        : poem.featured 
-        ? { ...poem, featured: false } 
-        : poem
-    ));
-    
-    setShowFeatureModal(false);
-    setSelectedPoemId(null);
-  };
-
   const renderStarRating = () => {
     return (
       <div className="flex items-center space-x-1">
@@ -130,7 +114,7 @@ const AdminReviewPage: React.FC = () => {
   };
   
   return (
-    <AppLayout title="Admin Review">
+    <AppLayout title="Review & Approve Poems">
       <div className="max-w-6xl mx-auto">
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
@@ -203,6 +187,17 @@ const AdminReviewPage: React.FC = () => {
               <div key={poem.id} className="relative">
                 {/* Admin action buttons */}
                 <div className="absolute -top-2 -right-2 z-10 flex space-x-1">
+                  <button
+                    className="bg-white rounded-full p-1 shadow-md hover:shadow-lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPoemId(poem.id);
+                    }}
+                    title="View Details"
+                  >
+                    <Eye size={20} className="text-primary-500 hover:text-primary-600" />
+                  </button>
+                  
                   {!poem.approved && (
                     <button
                       className="bg-white rounded-full p-1 shadow-md hover:shadow-lg"
@@ -218,32 +213,18 @@ const AdminReviewPage: React.FC = () => {
                   )}
                   
                   {poem.approved && (
-                    <>
-                      <button
-                        className="bg-white rounded-full p-1 shadow-md hover:shadow-lg"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPoemId(poem.id);
-                          setCurrentRating(poem.rating);
-                          setShowRatingModal(true);
-                        }}
-                        title="Rate Poem"
-                      >
-                        <Star size={20} className="text-yellow-500 hover:text-yellow-600" />
-                      </button>
-                      
-                      <button
-                        className="bg-white rounded-full p-1 shadow-md hover:shadow-lg"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPoemId(poem.id);
-                          setShowFeatureModal(true);
-                        }}
-                        title="Feature Poem"
-                      >
-                        <Trophy size={20} className={`${poem.featured ? 'text-primary-500' : 'text-gray-400'} hover:text-primary-600`} />
-                      </button>
-                    </>
+                    <button
+                      className="bg-white rounded-full p-1 shadow-md hover:shadow-lg"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedPoemId(poem.id);
+                        setCurrentRating(poem.rating);
+                        setShowRatingModal(true);
+                      }}
+                      title="Rate Poem"
+                    >
+                      <Star size={20} className="text-yellow-500 hover:text-yellow-600" />
+                    </button>
                   )}
                 </div>
                 
@@ -267,7 +248,7 @@ const AdminReviewPage: React.FC = () => {
         )}
         
         {/* Poem details modal */}
-        {selectedPoem && !showRatingModal && !showFeatureModal && (
+        {selectedPoem && !showRatingModal && (
           <PoemDetails
             poem={selectedPoem}
             onClose={() => setSelectedPoemId(null)}
@@ -308,42 +289,6 @@ const AdminReviewPage: React.FC = () => {
                   disabled={currentRating === 0}
                 >
                   Save Rating
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Feature modal */}
-        {showFeatureModal && selectedPoem && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-              <h3 className="text-xl font-semibold mb-4">
-                {selectedPoem.featured ? 'Remove from Featured' : 'Feature This Poem'}
-              </h3>
-              
-              <p className="text-secondary-600 mb-6">
-                {selectedPoem.featured 
-                  ? 'This poem is currently featured. Do you want to remove it from the featured section?'
-                  : 'Do you want to feature this poem? It will appear as the featured poem of the day and any previously featured poem will be unfeatured.'
-                }
-              </p>
-              
-              <div className="flex justify-end space-x-4">
-                <button
-                  onClick={() => {
-                    setShowFeatureModal(false);
-                    setSelectedPoemId(null);
-                  }}
-                  className="btn btn-secondary"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleFeaturePoem}
-                  className={`btn ${selectedPoem.featured ? 'bg-error-500 text-white hover:bg-error-600' : 'btn-primary'}`}
-                >
-                  {selectedPoem.featured ? 'Remove Feature' : 'Feature Poem'}
                 </button>
               </div>
             </div>

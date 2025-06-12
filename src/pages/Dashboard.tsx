@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PenTool, BookOpen, Calendar, Award, Trophy, Sparkles, UserCheck } from 'lucide-react';
+import { PenTool, BookOpen, Calendar, Award, Trophy, Sparkles, UserCheck, FileEdit, Star, CheckCircle } from 'lucide-react';
 import AppLayout from '../components/layout/AppLayout';
 import FeatureCard from '../components/common/FeatureCard';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,7 +9,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { isAdmin } = useAuth();
   
-  const features = [
+  const userFeatures = [
     {
       title: 'Submit Poem',
       description: 'Share your poetic creation with the world.',
@@ -53,17 +53,37 @@ const Dashboard: React.FC = () => {
       color: 'bg-accent-700',
     },
   ];
-  
-  // Add admin review feature if user is admin
-  if (isAdmin()) {
-    features.push({
-      title: 'Review Poems',
+
+  const adminFeatures = [
+    {
+      title: 'Review & Approve',
       description: 'Review and approve submitted poems.',
       icon: <UserCheck size={24} />,
       path: '/admin/review',
       color: 'bg-error-600',
-    });
-  }
+    },
+    {
+      title: 'Manage Opening Verses',
+      description: 'Upload and manage daily opening verses.',
+      icon: <Calendar size={24} />,
+      path: '/admin/opening-verses',
+      color: 'bg-purple-600',
+    },
+    {
+      title: 'Featured Poem Selection',
+      description: 'Select and manage featured poems of the day.',
+      icon: <Star size={24} />,
+      path: '/admin/featured-poem',
+      color: 'bg-yellow-600',
+    },
+    {
+      title: 'Poem Checking & Araz',
+      description: 'Check poems, upload araz versions, and manage status.',
+      icon: <FileEdit size={24} />,
+      path: '/admin/poem-checking',
+      color: 'bg-green-600',
+    },
+  ];
   
   return (
     <AppLayout title="Dashboard">
@@ -76,18 +96,41 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <FeatureCard
-              key={feature.title}
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              path={feature.path}
-              color={feature.color}
-            />
-          ))}
+        {/* User Features */}
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold mb-4">Poetry Features</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {userFeatures.map((feature) => (
+              <FeatureCard
+                key={feature.title}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                path={feature.path}
+                color={feature.color}
+              />
+            ))}
+          </div>
         </div>
+
+        {/* Admin Features */}
+        {isAdmin() && (
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-error-700">Admin Management</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+              {adminFeatures.map((feature) => (
+                <FeatureCard
+                  key={feature.title}
+                  title={feature.title}
+                  description={feature.description}
+                  icon={feature.icon}
+                  path={feature.path}
+                  color={feature.color}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </AppLayout>
   );

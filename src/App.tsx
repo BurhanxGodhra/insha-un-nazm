@@ -12,6 +12,9 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import BestPoemPage from './pages/BestPoemPage';
 import ShowcasePage from './pages/ShowcasePage';
 import AdminReviewPage from './pages/AdminReviewPage';
+import AdminOpeningVersesPage from './pages/AdminOpeningVersesPage';
+import AdminFeaturedPoemPage from './pages/AdminFeaturedPoemPage';
+import AdminPoemCheckingPage from './pages/AdminPoemCheckingPage';
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
             <Route path="/best-poem" element={<BestPoemPage />} />
             <Route path="/showcase" element={<ShowcasePage />} />
             <Route path="/admin/review" element={<AdminReviewPage />} />
+            <Route path="/admin/opening-verses" element={<AdminOpeningVersesPage />} />
+            <Route path="/admin/featured-poem" element={<AdminFeaturedPoemPage />} />
+            <Route path="/admin/poem-checking" element={<AdminPoemCheckingPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
