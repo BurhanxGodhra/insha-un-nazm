@@ -202,6 +202,8 @@ const SubmitPoemPage: React.FC = () => {
                       <option value="English">English</option>
                       <option value="Arabic">Arabic</option>
                       <option value="Urdu">Urdu</option>
+                      <option value="Lisan al-Dawah">Lisan al-Dawah</option>
+                      <option value="French">French</option>
                     </select>
                   </div>
                 </div>
