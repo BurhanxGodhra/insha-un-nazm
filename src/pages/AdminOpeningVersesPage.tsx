@@ -16,7 +16,7 @@ const AdminOpeningVersesPage: React.FC = () => {
   const [formData, setFormData] = useState({
     text: '',
     author: '',
-    language: 'English' as 'English' | 'Arabic' | 'Urdu',
+    language: 'English' as 'English' | 'Arabic' | 'Urdu' | 'Lisan al-Dawah' | 'French',
     day: 1,
   });
   
