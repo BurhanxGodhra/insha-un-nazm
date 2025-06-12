@@ -33,9 +33,17 @@ const BestPoemPage: React.FC = () => {
         [...approvedPoems]
           .filter(poem => poem.language === 'English')
           .sort((a, b) => b.likes - a.likes)[0],
+        // Best French poem
+        [...approvedPoems]
+          .filter(poem => poem.language === 'French')
+          .sort((a, b) => b.likes - a.likes)[0],
         // Best Arabic poem
         [...approvedPoems]
           .filter(poem => poem.language === 'Arabic')
+          .sort((a, b) => b.likes - a.likes)[0],
+        // Best Lisan al-Dawah poem
+        [...approvedPoems]
+          .filter(poem => poem.language === 'Lisan al-Dawah')
           .sort((a, b) => b.likes - a.likes)[0],
         // Best Urdu poem
         [...approvedPoems]
