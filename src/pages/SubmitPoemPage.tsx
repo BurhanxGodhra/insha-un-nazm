@@ -128,7 +128,7 @@ const SubmitPoemPage: React.FC = () => {
         {submitSuccess ? (
           <div className="bg-success-500 text-white p-6 rounded-lg mb-6 animate-fade-in">
             <h3 className="text-xl font-semibold mb-2">Thank you for your submission!</h3>
-            <p>Your {poemType === 'individual' ? 'Individual Abyat' : 'Full Nazam'} has been sent for review. Our poetry experts will evaluate it soon.</p>
+            <p>Your {poemType === 'individual' ? 'Individual Abyat' : 'Full Nazam'} has been sent for review.</p>
             <div className="mt-4 flex space-x-4">
               <button 
                 onClick={() => setSubmitSuccess(false)}
