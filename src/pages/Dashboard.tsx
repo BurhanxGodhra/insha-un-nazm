@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
   const adminFeatures = [
     {
       title: 'Review & Approve',
-      description: 'Review and approve submitted poems.',
+      description: 'Review and approve submitted nazms.',
       icon: <UserCheck size={24} />,
       path: '/admin/review',
       color: 'bg-accent-700',
@@ -70,15 +70,15 @@ const Dashboard: React.FC = () => {
       color: 'bg-purple-600',
     },
     {
-      title: 'Featured Poem Selection',
-      description: 'Select and manage featured poems of the day.',
+      title: 'Featured Nazm Selection',
+      description: 'Select and manage featured namzs of the day.',
       icon: <Star size={24} />,
       path: '/admin/featured-poem',
       color: 'bg-yellow-600',
     },
     {
-      title: 'Poem Checking & Araz',
-      description: 'Check poems, upload araz versions, and manage status.',
+      title: 'Nazm Checking & Araz',
+      description: 'Check nazms, upload araz versions, and manage status.',
       icon: <FileEdit size={24} />,
       path: '/admin/poem-checking',
       color: 'bg-green-600',
