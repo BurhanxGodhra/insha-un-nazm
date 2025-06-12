@@ -29,7 +29,7 @@ const SubmitPoemPage: React.FC = () => {
   }>({});
 
   // Set writing direction based on language
-  const textDirection = language === 'Arabic' || language === 'Urdu' ? 'rtl' : 'ltr';
+  const textDirection = language === 'Arabic' || language === 'Lisan al-Dawah' || language === 'Urdu' ? 'rtl' : 'ltr';
   
   // Filter opening verses by selected language
   useEffect(() => {
