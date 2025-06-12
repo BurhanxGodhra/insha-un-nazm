@@ -145,12 +145,14 @@ const AdminOpeningVersesPage: React.FC = () => {
                     value={formData.language}
                     onChange={(e) => setFormData({
                       ...formData,
-                      language: e.target.value as 'English' | 'Arabic' | 'Urdu'
+                      language: e.target.value as 'English' | 'Arabic' | 'Urdu'| 'Lisan al-Dawah' | 'French'
                     })}
                   >
                     <option value="English">English</option>
                     <option value="Arabic">Arabic</option>
                     <option value="Urdu">Urdu</option>
+                    <option value="Lisan al-Dawah">Lisan al-Dawah</option>
+                    <option value="French">French</option>
                   </select>
                 </div>
                 
