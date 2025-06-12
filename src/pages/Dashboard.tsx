@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
       description: 'Review and approve submitted poems.',
       icon: <UserCheck size={24} />,
       path: '/admin/review',
-      color: 'bg-error-600',
+      color: 'bg-accent-700',
     },
     {
       title: 'Manage Opening Verses',
