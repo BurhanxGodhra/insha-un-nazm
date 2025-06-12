@@ -119,7 +119,7 @@ const ShowcasePage: React.FC = () => {
 
             <div className="text-center text-secondary-600">
               <p className="italic">
-                "This {featuredPoem.type === 'individual' ? 'abyat' : 'nazam'} has been selected by our poetry experts as today's featured piece."
+                "This {featuredPoem.type === 'individual' ? 'abyat' : 'nazam'} has been selected as today's featured piece."
               </p>
             </div>
           </div>
