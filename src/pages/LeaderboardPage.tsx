@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Star, Trophy, Medal, Award } from 'lucide-react';
 import AppLayout from '../components/layout/AppLayout';
-import PoemCard from '../components/poems/PoemCard';
-import PoemDetails from '../components/poems/PoemDetails';
+import SimplePoemView from '../components/poems/SimplePoemView';
 import { mockPoems } from '../data/mockData';
 import { Poem } from '../types/poem';
 
@@ -167,9 +166,9 @@ const LeaderboardPage: React.FC = () => {
           </div>
         )}
         
-        {/* Poem details modal */}
+        {/* Simple poem view modal */}
         {selectedPoem && (
-          <PoemDetails
+          <SimplePoemView
             poem={selectedPoem}
             onClose={() => setSelectedPoemId(null)}
           />

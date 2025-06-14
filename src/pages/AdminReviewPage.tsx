@@ -20,6 +20,7 @@ const AdminReviewPage: React.FC = () => {
   const [languageFilter, setLanguageFilter] = useState<string>('all');
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [currentRating, setCurrentRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   
   // Redirect if not admin
   useEffect(() => {
@@ -91,26 +92,77 @@ const AdminReviewPage: React.FC = () => {
     
     setShowRatingModal(false);
     setCurrentRating(0);
+    setHoverRating(0);
     setSelectedPoemId(null);
   };
 
-  const renderStarRating = () => {
+  const handleStarClick = (rating: number) => {
+    setCurrentRating(rating);
+  };
+
+  const handleStarHover = (rating: number) => {
+    setHoverRating(rating);
+  };
+
+  const handleStarLeave = () => {
+    setHoverRating(0);
+  };
+
+  const renderInteractiveStarRating = () => {
+    const stars = [];
+    const displayRating = hoverRating || currentRating;
+    
+    for (let i = 1; i <= 5; i++) {
+      // Check for full star, half star, or empty star
+      const isFull = i <= displayRating;
+      const isHalf = i - 0.5 === displayRating;
+      
+      stars.push(
+        <div key={i} className="relative cursor-pointer">
+          {/* Full star background */}
+          <Star
+            size={32}
+            className={`transition-colors ${
+              isFull ? 'text-yellow-400 fill-current' : 'text-gray-300'
+            }`}
+            onClick={() => handleStarClick(i)}
+            onMouseEnter={() => handleStarHover(i)}
+            onMouseLeave={handleStarLeave}
+          />
+          
+          {/* Half star overlay */}
+          <div
+            className="absolute inset-0 w-1/2 overflow-hidden cursor-pointer"
+            onClick={() => handleStarClick(i - 0.5)}
+            onMouseEnter={() => handleStarHover(i - 0.5)}
+            onMouseLeave={handleStarLeave}
+          >
+            <Star
+              size={32}
+              className={`transition-colors ${
+                isHalf || (displayRating >= i - 0.5 && displayRating < i) 
+                  ? 'text-yellow-400 fill-current' 
+                  : 'text-transparent'
+              }`}
+            />
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div className="flex items-center space-x-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            size={24}
-            className={`cursor-pointer transition-colors ${
-              star <= currentRating
-                ? 'text-yellow-400 fill-current'
-                : 'text-gray-300 hover:text-yellow-300'
-            }`}
-            onClick={() => setCurrentRating(star)}
-          />
-        ))}
+        {stars}
       </div>
     );
+  };
+
+  const openRatingModal = (poemId: string) => {
+    const poem = poems.find(p => p.id === poemId);
+    setSelectedPoemId(poemId);
+    setCurrentRating(poem?.rating || 0);
+    setHoverRating(0);
+    setShowRatingModal(true);
   };
   
   return (
@@ -214,20 +266,16 @@ const AdminReviewPage: React.FC = () => {
                     </button>
                   )}
                   
-                  {poem.approved && (
-                    <button
-                      className="bg-white rounded-full p-1 shadow-md hover:shadow-lg"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedPoemId(poem.id);
-                        setCurrentRating(poem.rating);
-                        setShowRatingModal(true);
-                      }}
-                      title="Rate Poem"
-                    >
-                      <Star size={20} className="text-yellow-500 hover:text-yellow-600" />
-                    </button>
-                  )}
+                  <button
+                    className="bg-white rounded-full p-1 shadow-md hover:shadow-lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openRatingModal(poem.id);
+                    }}
+                    title="Rate Poem"
+                  >
+                    <Star size={20} className="text-yellow-500 hover:text-yellow-600" />
+                  </button>
                 </div>
                 
                 <PoemCard 
@@ -267,9 +315,11 @@ const AdminReviewPage: React.FC = () => {
               <h3 className="text-xl font-semibold mb-4">Rate This {selectedPoem.type === 'individual' ? 'Abyat' : 'Nazam'}</h3>
               
               <div className="mb-6">
-                <p className="text-secondary-600 mb-4">Select a rating from 1 to 5 stars:</p>
-                {renderStarRating()}
-                <p className="text-sm text-secondary-500 mt-2">
+                <p className="text-secondary-600 mb-4">Select a rating from 0.5 to 5 stars:</p>
+                <div className="flex justify-center mb-4">
+                  {renderInteractiveStarRating()}
+                </div>
+                <p className="text-sm text-secondary-500 text-center">
                   Current rating: {currentRating > 0 ? `${currentRating} star${currentRating > 1 ? 's' : ''}` : 'No rating selected'}
                 </p>
               </div>
@@ -279,6 +329,7 @@ const AdminReviewPage: React.FC = () => {
                   onClick={() => {
                     setShowRatingModal(false);
                     setCurrentRating(0);
+                    setHoverRating(0);
                     setSelectedPoemId(null);
                   }}
                   className="btn btn-secondary"
